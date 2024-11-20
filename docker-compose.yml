@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: graylog-mongodb
+    networks:
+      - graylog
+    restart: always
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+    container_name: graylog-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - graylog
+    restart: always
+
+  graylog:
+    image: graylog/graylog:4.3
+    container_name: graylog-server
+    environment:
+      - GRAYLOG_PASSWORD_SECRET=supersecretpassword123supersecretpassword123supersecretpassword123
+      - GRAYLOG_ROOT_PASSWORD_SHA2=d033e22ae348aeb5660fc2140aec35850c4da997 # SHA256 de "admin"
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
+      - GRAYLOG_MONGODB_URI=mongodb://graylog-mongodb:27017/graylog
+    depends_on:
+      - mongodb
+      - elasticsearch
+    ports:
+      - "9000:9000"
+      - "12201:12201/udp"
+    networks:
+      - graylog
+    restart: always
+
+networks:
+  graylog:
+    driver: bridge
