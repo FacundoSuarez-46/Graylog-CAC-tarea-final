@@ -21,8 +21,8 @@ services:
     image: graylog/graylog:4.3
     container_name: graylog-server
     environment:
-      - GRAYLOG_PASSWORD_SECRET=admin
-      - GRAYLOG_ROOT_PASSWORD_SHA2=d033e22ae348aeb5660fc2140aec35850c4da997 # SHA256 de "admin"
+      - GRAYLOG_PASSWORD_SECRET=admin123456789123456789
+      - GRAYLOG_ROOT_PASSWORD_SHA2=e6bdfa3e93c1c93669549cc718fc8366ff422f28ac0af6696e353fee52a37fd0 # SHA256 de "admin"
       - GRAYLOG_HTTP_EXTERNAL_URI=http://localhost:9000/
       - GRAYLOG_MONGODB_URI=mongodb://graylog-mongodb:27017/graylog
     depends_on:
